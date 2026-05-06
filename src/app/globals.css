@@ -80,12 +80,13 @@ body {
    FIXED-CONTRAST TEXT — for use on accent backgrounds.
    Theme tokens (ink-0/paper-0) FLIP in dark mode; accent bgs
    do NOT. Pairing the two breaks contrast. Use these instead.
+   Defined with @utility so they're real Tailwind utilities.
    ========================================================= */
-.text-on-acid,
-.text-on-pink,
-.text-on-kelly  { color: #0C0C0C !important; }
-.text-on-cobalt { color: #EEEEEE !important; }
-.text-on-ink    { color: #EEEEEE !important; } /* for use on bg-ink-0 fixed */
+@utility text-on-acid  { color: #0C0C0C; }
+@utility text-on-pink  { color: #0C0C0C; }
+@utility text-on-kelly { color: #0C0C0C; }
+@utility text-on-cobalt { color: #EEEEEE; }
+@utility text-on-ink    { color: #EEEEEE; }
 
 /* =========================================================
    MOTION UTILITIES — step-based, retro. Match motion-meter.html.

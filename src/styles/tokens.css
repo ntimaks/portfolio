@@ -347,16 +347,23 @@ code, .t-code {
   font-style: italic;
 }
 
-/* LINKS — underlined, ink, hover -> acid bg */
-a, .t-link {
-  color: var(--link);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-thickness: 1px;
-}
-a:hover, .t-link:hover {
-  background: var(--acid);
-  text-decoration: none;
+/* LINKS — underlined, ink, hover -> acid bg.
+   Wrapped in @layer base so Tailwind utilities (text-on-acid, no-underline)
+   win the cascade. Text-decoration-color = currentColor so underline always
+   matches the text color, even when overridden by utilities. */
+@layer base {
+  a, .t-link {
+    color: var(--link);
+    text-decoration: underline;
+    text-decoration-color: currentColor;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+  a:hover, .t-link:hover {
+    background: var(--acid);
+    color: #0C0C0C; /* fixed; lime bg never flips, so text mustn't either */
+    text-decoration: none;
+  }
 }
 
 /* HR — horizontal rule, hard black 1px */

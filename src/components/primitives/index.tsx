@@ -146,13 +146,13 @@ export function MetaStrip({
           key={i}
           className={`group/cell ${compact ? "px-2 py-1" : "px-2.5 py-2"} ${
             i < cells.length - 1 ? "border-r border-ink-0" : ""
-          } transition-colors duration-[120ms] hover:bg-paper-0 hover:shadow-[inset_2px_0_0_0_var(--cobalt)]`}
+          } transition-[background-color,box-shadow] duration-[120ms] hover:bg-paper-2 hover:shadow-[inset_2px_0_0_0_var(--ink-0)]`}
         >
-          <div className="text-[9px] tracking-[0.2em] uppercase text-ink-3 group-hover/cell:text-cobalt flex items-center gap-1.5 truncate">
+          <div className="text-[9px] tracking-[0.2em] uppercase text-ink-3 flex items-center gap-1.5 truncate">
             {c.lbl}
             {c.live && <span className="inline-block w-1.5 h-1.5 rounded-full bg-kelly caret shrink-0" />}
           </div>
-          <div className={`font-mono ${compact ? "text-[11px]" : "text-[13px]"} text-ink-0 group-hover/cell:text-cobalt mt-0.5 truncate`}>
+          <div className={`font-mono ${compact ? "text-[11px]" : "text-[13px]"} text-ink-0 mt-0.5 truncate`}>
             {c.val}
           </div>
           {c.sub && <div className="text-[10px] text-ink-3 truncate">{c.sub}</div>}

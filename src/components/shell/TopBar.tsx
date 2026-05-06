@@ -46,14 +46,12 @@ export function TopBar({
               className={`group/nav px-3 flex items-center gap-2 border-r border-ink-0 no-underline transition-colors duration-[120ms] ${
                 active
                   ? "bg-acid text-on-acid"
-                  : "text-ink-0 hover:bg-cobalt hover:text-on-cobalt"
+                  : "text-ink-0 hover:bg-paper-2"
               }`}
             >
               <span
                 className={`font-pixel text-[16px] tracking-normal leading-none ${
-                  active
-                    ? "text-on-acid opacity-70"
-                    : "text-ink-3 group-hover/nav:text-on-cobalt group-hover/nav:opacity-70"
+                  active ? "text-on-acid opacity-70" : "text-ink-3"
                 }`}
               >
                 [{n.code}]
