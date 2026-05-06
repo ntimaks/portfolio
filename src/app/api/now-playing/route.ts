@@ -29,7 +29,8 @@ export async function GET() {
     const j = await r.json();
     const t: Track | undefined = j.recenttracks?.track?.[0] ?? j.recenttracks?.track;
     if (!t) return NextResponse.json({ nowPlaying: false });
-    const art = t.image?.find((i) => i["#text"])?.["#text"] ?? null;
+    const images = t.image?.filter((i) => i["#text"]) ?? [];
+    const art = images[images.length - 1]?.["#text"] ?? null;
     return NextResponse.json({
       nowPlaying: t["@attr"]?.nowplaying === "true",
       track: t.name,

@@ -42,7 +42,7 @@ export function NowPlayingCard({ className = "" }: { className?: string }) {
         <div className="w-[112px] h-[112px] bg-ink-0 border border-ink-0 flex items-center justify-center text-paper-0 font-pixel text-[20px] relative overflow-hidden shrink-0">
           {np?.art ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={np.art} alt="" className="halftone w-full h-full object-cover" />
+            <img src={np.art} alt="" className="w-full h-full object-cover" />
           ) : (
             <span className="opacity-60">▓░ NO ART ░▓</span>
           )}

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Space_Grotesk, VT323, DM_Serif_Display } from "next/font/google";
 import "./globals.css";
-import { TopStrip } from "@/components/control-panel/TopStrip";
-import { BottomStrip } from "@/components/control-panel/BottomStrip";
+import { Frame } from "@/components/shell/Frame";
+import { themeBootScript } from "@/components/shell/ThemeProvider";
 import { siteConfig } from "@/lib/site-config";
 
 const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--font-jb" });
@@ -17,11 +17,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${mono.variable} ${display.variable} ${pixel.variable} ${serif.variable}`}>
-      <body className="min-h-screen flex flex-col">
-        <TopStrip />
-        <main className="flex-1 pt-[36px] pb-[42px]">{children}</main>
-        <BottomStrip />
+    <html lang="en" className={`${mono.variable} ${display.variable} ${pixel.variable} ${serif.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
+      </head>
+      <body className="antialiased">
+        <Frame>{children}</Frame>
       </body>
     </html>
   );

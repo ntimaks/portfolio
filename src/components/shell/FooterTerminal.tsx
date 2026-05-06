@@ -6,13 +6,11 @@ type NowPlaying = {
   nowPlaying: boolean;
   track?: string;
   artist?: string;
-  album?: string;
-  art?: string;
 } | null;
 
-export function BottomStrip() {
+export function FooterTerminal() {
   const [now, setNow] = useState<NowPlaying>(null);
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState("--:--:--");
   const [visitors, setVisitors] = useState<number | null>(null);
   const buildHash = (process.env.NEXT_PUBLIC_BUILD_HASH ?? "local").slice(0, 7);
 
@@ -20,9 +18,7 @@ export function BottomStrip() {
     const tick = () =>
       setTime(
         new Date().toLocaleTimeString("en-GB", {
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
+          hour: "2-digit", minute: "2-digit", second: "2-digit",
           timeZone: siteConfig.location.tz,
         }),
       );
@@ -43,10 +39,7 @@ export function BottomStrip() {
     };
     fetchNow();
     const id = setInterval(fetchNow, 30_000);
-    return () => {
-      active = false;
-      clearInterval(id);
-    };
+    return () => { active = false; clearInterval(id); };
   }, []);
 
   useEffect(() => {
@@ -61,10 +54,7 @@ export function BottomStrip() {
     };
     ping();
     const id = setInterval(ping, 20_000);
-    return () => {
-      active = false;
-      clearInterval(id);
-    };
+    return () => { active = false; clearInterval(id); };
   }, []);
 
   const trackLine = now
@@ -73,14 +63,35 @@ export function BottomStrip() {
       : `last: ${now.track} — ${now.artist}`
     : "—";
 
+  const cells = [
+    { label: "NOW",      value: trackLine, live: !!now?.nowPlaying },
+    { label: "VISITORS", value: visitors == null ? "…" : String(visitors).padStart(2, "0") },
+    { label: "TIME",     value: `${time} ${siteConfig.location.tz.split("/")[1]}` },
+    { label: "LOC",      value: `${siteConfig.location.city}, ${siteConfig.location.country}` },
+    { label: "BUILD",    value: buildHash },
+  ];
+
   return (
-    <footer className="fixed bottom-0 inset-x-0 z-40 h-[42px] bg-term-bg text-term-fg border-t border-ink-0 font-pixel text-[18px] leading-none flex items-center overflow-hidden">
-      <Cell label="NOW" value={trackLine} live={!!now?.nowPlaying} />
-      <Cell label="VISITORS" value={visitors == null ? "…" : String(visitors).padStart(2, "0")} />
-      <Cell label="TIME" value={`${time} ${siteConfig.location.tz.split("/")[1]}`} />
-      <Cell label="LOC" value={`${siteConfig.location.city}, ${siteConfig.location.country}`} />
-      <Cell label="BUILD" value={buildHash} />
-      <span className="caret px-3 text-acid">█</span>
+    <footer className="bg-term-bg text-term-fg border-t border-ink-0 font-pixel text-[18px] leading-none flex items-center overflow-hidden h-[42px]">
+      {/* Desktop: cells side by side */}
+      <div className="hidden md:flex flex-1 items-center overflow-hidden">
+        {cells.map((c) => <Cell key={c.label} {...c} />)}
+        <span className="caret px-3 text-acid">█</span>
+      </div>
+
+      {/* Mobile: marquee */}
+      <div className="md:hidden flex-1 overflow-hidden">
+        <div className="marquee-track-fast inline-flex whitespace-nowrap">
+          {[...cells, ...cells].map((c, i) => (
+            <span key={`${c.label}-${i}`} className="px-4 inline-flex items-center gap-2">
+              <span className="text-term-dim text-[14px] tracking-widest">[{c.label}]</span>
+              <span>{c.value}</span>
+              {c.live && <span className="caret text-acid">●</span>}
+              <span className="text-term-dim ml-1">{"//"}</span>
+            </span>
+          ))}
+        </div>
+      </div>
     </footer>
   );
 }
@@ -89,9 +100,9 @@ function Cell({ label, value, live = false }: { label: string; value: string; li
   return (
     <div className="px-3 h-full flex items-center gap-2 border-r border-term-dim/40 whitespace-nowrap">
       <span className="text-term-dim text-[14px] tracking-widest">[{label}]</span>
-      <span>{value}</span>
+      <span className="truncate max-w-[260px]">{value}</span>
       {live && <span className="caret text-acid">●</span>}
-      <span className="text-term-dim ml-1">//</span>
+      <span className="text-term-dim ml-1">{"//"}</span>
     </div>
   );
 }

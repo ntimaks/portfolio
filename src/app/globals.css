@@ -12,16 +12,26 @@
   --color-ink-3: var(--ink-3);
   --color-ink-4: var(--ink-4);
   --color-ink-5: var(--ink-5);
+
   --color-acid: var(--acid);
   --color-acid-deep: var(--acid-deep);
+  --color-lime: var(--lime);
+  --color-lime-deep: var(--lime-deep);
   --color-cobalt: var(--cobalt);
+  --color-cobalt-deep: var(--cobalt-deep);
   --color-vermillion: var(--vermillion);
+  --color-vermillion-deep: var(--vermillion-deep);
+  --color-pink: var(--vermillion);
+  --color-pink-deep: var(--vermillion-deep);
   --color-kelly: var(--kelly);
+  --color-kelly-deep: var(--kelly-deep);
+
   --color-term-bg: var(--term-bg);
   --color-term-fg: var(--term-fg);
   --color-term-dim: var(--term-dim);
   --color-term-red: var(--term-red);
   --color-term-amber: var(--term-amber);
+  --color-term-blue: var(--term-blue);
 
   --font-mono: var(--ff-mono);
   --font-display: var(--ff-display);
@@ -31,8 +41,16 @@
   --shadow-stamp: var(--sh-stamp);
   --shadow-stamp-lg: var(--sh-stamp-lg);
   --shadow-stamp-acid: var(--sh-stamp-acid);
+  --shadow-stamp-cobalt: var(--sh-stamp-cobalt);
+  --shadow-stamp-pink: var(--sh-stamp-pink);
+  --shadow-stamp-kelly: var(--sh-stamp-kelly);
+  --shadow-ring: var(--ring-focus);
+  --shadow-ring-cobalt: var(--ring-focus-cobalt);
+  --shadow-ring-pink: var(--ring-focus-pink);
+  --shadow-ring-red: var(--ring-focus-red);
 }
 
+/* Body — paper bg with subtle dot grain. Grain darkens in dark mode. */
 body {
   background-color: var(--paper-0);
   background-image:
@@ -43,9 +61,50 @@ body {
   color: var(--ink-0);
   font-family: var(--ff-mono);
 }
+[data-theme="dark"] body {
+  background-image:
+    radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) body {
+    background-image:
+      radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+  }
+}
 
-::selection { background: var(--acid); color: var(--ink-0); }
+::selection { background: var(--acid); color: #0C0C0C; }
 
+/* =========================================================
+   FIXED-CONTRAST TEXT — for use on accent backgrounds.
+   Theme tokens (ink-0/paper-0) FLIP in dark mode; accent bgs
+   do NOT. Pairing the two breaks contrast. Use these instead.
+   ========================================================= */
+.text-on-acid,
+.text-on-pink,
+.text-on-kelly  { color: #0C0C0C !important; }
+.text-on-cobalt { color: #EEEEEE !important; }
+.text-on-ink    { color: #EEEEEE !important; } /* for use on bg-ink-0 fixed */
+
+/* =========================================================
+   MOTION UTILITIES — step-based, retro. Match motion-meter.html.
+   ========================================================= */
+
+/* Caret blink — terminals, inputs */
+@keyframes caret-blink { 50% { opacity: 0; } }
+.caret { animation: caret-blink 1s steps(2, end) infinite; }
+
+/* Scan line — sweeps top-to-bottom, "decoding" state */
+@keyframes scan { 0% { transform: translateY(-100%); } 100% { transform: translateY(2000%); } }
+.scan-line {
+  position: absolute; left: 0; right: 0; top: 0; height: 2px;
+  background: var(--acid);
+  animation: scan 4s steps(40) infinite;
+  pointer-events: none;
+}
+
+/* Scanlines overlay (CRT) */
 .scanlines { position: relative; }
 .scanlines::after {
   content: "";
@@ -58,17 +117,54 @@ body {
   pointer-events: none;
 }
 
-@keyframes caret-blink { 50% { opacity: 0; } }
-.caret { animation: caret-blink 1s steps(2, end) infinite; }
-
+/* Marquee — footer ticker */
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .marquee-track { animation: marquee 40s linear infinite; }
+.marquee-track-fast { animation: marquee 18s linear infinite; }
 
-@keyframes scan { 0% { transform: translateY(-100%); } 100% { transform: translateY(2000%); } }
-.scan-line {
-  position: absolute; left: 0; right: 0; top: 0; height: 2px;
-  background: var(--acid);
-  animation: scan 4s steps(40) infinite;
+/* Glitch — RGB split, hero error moments. Opt-in via .glitch class. */
+@keyframes glitch-x {
+  0%, 100% { transform: translate(0,0); }
+  20% { transform: translate(-1px, 1px); }
+  40% { transform: translate(1px, -1px); }
+  60% { transform: translate(-2px, 0); }
+  80% { transform: translate(2px, 1px); }
+}
+.glitch {
+  position: relative;
+  display: inline-block;
+  animation: glitch-x 3.2s steps(8, end) infinite;
+}
+.glitch::before, .glitch::after {
+  content: attr(data-text);
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+.glitch::before { color: var(--vermillion); transform: translate(-2px, 0); mix-blend-mode: multiply; }
+.glitch::after  { color: var(--cobalt);     transform: translate(2px, 0);  mix-blend-mode: multiply; }
+
+/* Typewriter — steps reveal. Combine with width animation. */
+@keyframes typewriter { from { width: 0; } to { width: 100%; } }
+.typewriter {
+  overflow: hidden; white-space: nowrap;
+  animation: typewriter 2.4s steps(28, end) forwards;
 }
 
+/* Load meter — step bar fill */
+@keyframes load-meter { from { width: 0%; } to { width: 100%; } }
+.load-meter {
+  display: inline-block; height: 6px; background: var(--acid);
+  animation: load-meter 3.2s steps(20, end) infinite;
+}
+
+/* Digit flip — counter rolldown. Wrap each digit in a span. */
+@keyframes digit-flip { 0% { transform: translateY(-100%); } 100% { transform: translateY(0); } }
+.digit-flip { display: inline-block; animation: digit-flip 0.4s steps(10, end); }
+
+/* Halftone filter — apply to <img> */
 .halftone { filter: url(/assets/halftone-filter.svg#halftone) grayscale(1) contrast(1.05); }
+
+/* No-FOUC theme guard — apply theme attribute synchronously in <head>. */
+html { color-scheme: light; }
+[data-theme="dark"] { color-scheme: dark; }

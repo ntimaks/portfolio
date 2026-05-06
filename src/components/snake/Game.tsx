@@ -129,7 +129,7 @@ export function SnakeGame({ onSubmitted }: { onSubmitted?: () => void }) {
   }, [phase, start]);
 
   async function submit() {
-    if (!/^[A-Z0-9]{3}$/.test(initials)) return;
+    if (!/^[A-Z0-9]{2,3}$/.test(initials)) return;
     setSubmitting(true);
     const startedAt = stateRef.current?.startedAt ?? Date.now();
     await fetch("/api/leaderboard", {
@@ -166,7 +166,7 @@ export function SnakeGame({ onSubmitted }: { onSubmitted?: () => void }) {
               )}
               {phase === "saved" && (
                 <>
-                  <div className="font-mono font-bold text-[16px] mb-1 text-term-green">[ SAVED ]</div>
+                  <div className="font-mono font-bold text-[16px] mb-1 text-kelly">[ SAVED ]</div>
                   <div className="text-[12px] text-ink-2">SCORE // {String(score).padStart(4, "0")} · filed.</div>
                 </>
               )}
@@ -185,7 +185,7 @@ export function SnakeGame({ onSubmitted }: { onSubmitted?: () => void }) {
                     />
                   </div>
                   <div className="flex gap-2 mt-3">
-                    <StampButton variant="acid" onClick={submit} disabled={submitting || initials.length < 3}>
+                    <StampButton variant="acid" onClick={submit} disabled={submitting || initials.length < 2}>
                       [ SUBMIT ]
                     </StampButton>
                     <StampButton variant="ghost" onClick={() => setPhase("idle")}>cancel</StampButton>

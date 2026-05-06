@@ -13,6 +13,7 @@ export function Leaderboard({ refreshKey }: { refreshKey: number }) {
     setScores(j.scores ?? []);
   }, []);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchScores(); }, [fetchScores, refreshKey]);
 
   return (
@@ -40,7 +41,7 @@ export function Leaderboard({ refreshKey }: { refreshKey: number }) {
           {scores.length === 0 && (
             <tr>
               <td colSpan={4} className="py-4 text-center text-ink-3 text-[12px]">
-                // no scores filed yet.
+                {"// no scores filed yet."}
               </td>
             </tr>
           )}

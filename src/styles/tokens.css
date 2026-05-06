@@ -27,14 +27,16 @@
   --ink-4:   #8A8A88;   /* tertiary / metadata */
   --ink-5:   #B4B4B2;   /* hairline / disabled */
 
-  /* ACCENTS — bold, technical, SATURATED.
-     Use ONE per page, max two on rare occasions. They carry meaning:
-       acid    → active state / now / live
-       magenta → editorial / featured / highlight
-       cyan    → links / interactive / data
-       amber   → warning / pending / caution
-       orange  → archive / historical / locked
-     The "default" accent — when in doubt — is still acid. */
+  /* ACCENTS — SEMANTIC ROLES (enforced site-wide):
+       lime / acid → live, active, "now playing", "you are here"
+                     ★ NEVER use white text on lime. Always var(--ink-0).
+       cobalt      → links, data points, interactive accent on hover
+       vermillion  → featured / hero highlight (max ONE per page)
+       kelly       → success, supporting positive states, tags
+       term-red    → errors only
+       term-amber  → warnings / pending
+     Use ONE accent per page; vermillion+lime never together.
+     The default accent is still lime. */
    /* =========================================================
       ACCENTS — 4 hues only, pulled from the poster series.
       lime (default) · cobalt (link) · vermillion (featured) · kelly (support).
@@ -206,7 +208,16 @@
   --sh-stamp:  3px 3px 0 0 var(--ink-0);     /* hard offset shadow */
   --sh-stamp-lg: 6px 6px 0 0 var(--ink-0);
   --sh-stamp-acid: 3px 3px 0 0 var(--acid);
+  --sh-stamp-cobalt: 3px 3px 0 0 var(--cobalt);
+  --sh-stamp-pink:   3px 3px 0 0 var(--vermillion);
+  --sh-stamp-kelly:  3px 3px 0 0 var(--kelly);
   --sh-inner-press: inset 2px 2px 0 0 rgba(0,0,0,0.18);
+
+  /* RINGS — focus, used by inputs/buttons. 3px offset, no blur. */
+  --ring-focus:        0 0 0 3px var(--acid);
+  --ring-focus-cobalt: 0 0 0 3px var(--cobalt);
+  --ring-focus-pink:   0 0 0 3px var(--vermillion);
+  --ring-focus-red:    0 0 0 3px var(--term-red);
 
   /* =========================================================
      MOTION — fast, no easing flair. Step-based for retro feel.
@@ -215,6 +226,7 @@
   --dur-fast:    120ms;
   --dur-base:    180ms;
   --dur-slow:    320ms;
+  --dur-press:   80ms;     /* button press collapse */
 
   --ease-linear: linear;
   --ease-step:   steps(6, end);   /* used for terminal blink, scan */
@@ -376,6 +388,11 @@ hr, .t-rule {
   --fg-on-dark:    var(--dark-0);
   --sh-stamp:      3px 3px 0 0 var(--dark-fg-0);
   --sh-stamp-lg:   6px 6px 0 0 var(--dark-fg-0);
+  /* Cobalt becomes too dark on near-black; brighten for foreground readability.
+     Background usages still pair with .text-on-cobalt (#EEEEEE), which remains
+     readable on the brighter shade. */
+  --cobalt:      #4A78F0;
+  --cobalt-deep: #2E58D0;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -389,5 +406,7 @@ hr, .t-rule {
     --ink-3:   var(--dark-fg-2);
     --ink-4:   var(--dark-fg-3);
     --ink-5:   #3A4148;
+    --cobalt:      #4A78F0;
+    --cobalt-deep: #2E58D0;
   }
 }
