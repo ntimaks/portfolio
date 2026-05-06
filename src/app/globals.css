@@ -1,26 +1,74 @@
 @import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import "../styles/tokens.css";
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-paper-0: var(--paper-0);
+  --color-paper-1: var(--paper-1);
+  --color-paper-2: var(--paper-2);
+  --color-paper-3: var(--paper-3);
+  --color-ink-0: var(--ink-0);
+  --color-ink-1: var(--ink-1);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-ink-4: var(--ink-4);
+  --color-ink-5: var(--ink-5);
+  --color-acid: var(--acid);
+  --color-acid-deep: var(--acid-deep);
+  --color-cobalt: var(--cobalt);
+  --color-vermillion: var(--vermillion);
+  --color-kelly: var(--kelly);
+  --color-term-bg: var(--term-bg);
+  --color-term-fg: var(--term-fg);
+  --color-term-dim: var(--term-dim);
+  --color-term-red: var(--term-red);
+  --color-term-amber: var(--term-amber);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-mono: var(--ff-mono);
+  --font-display: var(--ff-display);
+  --font-pixel: var(--ff-pixel);
+  --font-serif: var(--ff-serif);
+
+  --shadow-stamp: var(--sh-stamp);
+  --shadow-stamp-lg: var(--sh-stamp-lg);
+  --shadow-stamp-acid: var(--sh-stamp-acid);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--paper-0);
+  background-image:
+    radial-gradient(rgba(0,0,0,0.035) 1px, transparent 1px),
+    radial-gradient(rgba(0,0,0,0.025) 1px, transparent 1px);
+  background-size: 3px 3px, 7px 7px;
+  background-position: 0 0, 1px 1px;
+  color: var(--ink-0);
+  font-family: var(--ff-mono);
 }
+
+::selection { background: var(--acid); color: var(--ink-0); }
+
+.scanlines { position: relative; }
+.scanlines::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.04) 0 1px,
+    transparent 1px 3px
+  );
+  pointer-events: none;
+}
+
+@keyframes caret-blink { 50% { opacity: 0; } }
+.caret { animation: caret-blink 1s steps(2, end) infinite; }
+
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee-track { animation: marquee 40s linear infinite; }
+
+@keyframes scan { 0% { transform: translateY(-100%); } 100% { transform: translateY(2000%); } }
+.scan-line {
+  position: absolute; left: 0; right: 0; top: 0; height: 2px;
+  background: var(--acid);
+  animation: scan 4s steps(40) infinite;
+}
+
+.halftone { filter: url(/assets/halftone-filter.svg#halftone) grayscale(1) contrast(1.05); }
