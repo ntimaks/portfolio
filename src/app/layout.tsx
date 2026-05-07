@@ -4,6 +4,7 @@ import "./globals.css";
 import { Frame } from "@/components/shell/Frame";
 import { themeBootScript } from "@/components/shell/ThemeProvider";
 import { siteConfig } from "@/lib/site-config";
+import { Analytics } from '@vercel/analytics/next';
 
 const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--font-jb" });
 const display = Space_Grotesk({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--font-grotesk" });
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="antialiased">
         <Frame>{children}</Frame>
+        <Analytics />
       </body>
     </html>
   );
