@@ -55,7 +55,7 @@ export function Sidebar({
         </div>
         <div className="flex-1 overflow-y-auto">
           {entries.map((e) => (
-            <SidebarItem key={e.id} entry={e} pathname={pathname} />
+            <SidebarItem key={e.id} entry={e} pathname={pathname} onClose={onClose} />
           ))}
           {entries.length === 0 && (
             <div className="px-3 py-6 text-[11px] text-ink-3 text-center">
@@ -86,7 +86,7 @@ export function Sidebar({
   );
 }
 
-function SidebarItem({ entry, pathname }: { entry: SidebarEntry; pathname: string }) {
+function SidebarItem({ entry, pathname, onClose }: { entry: SidebarEntry; pathname: string; onClose: () => void }) {
   const active = entry.href === pathname || (entry.href !== "/" && pathname.startsWith(entry.href + "/"));
   const isAnchor = entry.href.startsWith("#");
   const cls = `grid grid-cols-[36px_1fr_auto] gap-2 px-3 py-2.5 border-b border-dotted border-ink-5 no-underline transition-colors duration-[120ms] ${
@@ -114,7 +114,7 @@ function SidebarItem({ entry, pathname }: { entry: SidebarEntry; pathname: strin
     </>
   );
   return isAnchor ? (
-    <a href={entry.href} className={cls}>{inner}</a>
+    <a href={entry.href} className={cls} onClick={onClose}>{inner}</a>
   ) : (
     <Link href={entry.href} className={cls}>{inner}</Link>
   );

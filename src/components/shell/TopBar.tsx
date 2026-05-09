@@ -35,22 +35,22 @@ export function TopBar({
         <span className="font-mono text-[14px]">{drawerOpen ? "✕" : "≡"}</span>
       </button>
 
-      {/* Nav (desktop) */}
-      <nav className="hidden lg:flex items-stretch flex-1 overflow-x-auto">
+      {/* Nav */}
+      <nav className="flex items-stretch flex-1 overflow-x-auto">
         {NAV.map((n) => {
           const active = n.href === "/" ? pathname === "/" : pathname.startsWith(n.href);
           return (
             <Link
               key={n.href}
               href={n.href}
-              className={`group/nav px-3 flex items-center gap-2 border-r border-ink-0 no-underline transition-colors duration-[120ms] ${
+              className={`group/nav px-2 lg:px-3 flex items-center gap-1 lg:gap-2 border-r border-ink-0 no-underline transition-colors duration-[120ms] whitespace-nowrap ${
                 active
                   ? "bg-acid text-on-acid"
                   : "text-ink-0 hover:bg-paper-2"
               }`}
             >
               <span
-                className={`font-pixel text-[16px] tracking-normal leading-none ${
+                className={`hidden lg:inline font-pixel text-[16px] tracking-normal leading-none ${
                   active ? "text-on-acid opacity-70" : "text-ink-3"
                 }`}
               >
@@ -61,9 +61,6 @@ export function TopBar({
           );
         })}
       </nav>
-
-      {/* Spacer for mobile */}
-      <div className="lg:hidden flex-1" />
 
       {/* Theme toggle */}
       <button
